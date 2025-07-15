@@ -69,10 +69,10 @@ chmod +x *.sh
 
 ### 部署脚本核心逻辑（deploy.sh）
 ```
+# 一键部署脚本 (deploy.sh)
 #!/bin/bash
-# 启用GlobalRoute直连
-kubectl patch cm tke-service-controller-config -n kube-system \
-  --patch '{"data":{"GlobalRouteDirectAccess":"true"}}'
+# 启用直连能力
+kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{"GlobalRouteDirectAccess":"true"}}'
 
 # 创建业务负载
 cat <<EOF | kubectl apply -f -
@@ -80,15 +80,23 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: real-ip-demo
+  labels:
+    app: real-ip-app
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: real-ip-app
   template:
+    metadata:
+      labels:
+        app: real-ip-app
     spec:
       containers:
       - name: real-ip-container
-        image: vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0 # 替换为您的镜像
+        image: vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0
         ports:
-        - containerPort: 5000 # 业务实际端口
+        - containerPort: 5000
 EOF
 
 # 创建直连Service
@@ -98,25 +106,38 @@ kind: Service
 metadata:
   name: clb-direct-pod
   annotations:
-    service.cloud.tencent.com/direct-access: "true" # 直连开关
+    service.cloud.tencent.com/direct-access: "true"
+    service.cloud.tencent.com/loadbalance-type: "OPEN"
 spec:
+  selector:
+    app: real-ip-app
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 80         # 外部访问端口
-      targetPort: 5000 # 业务容器端口
+      port: 80
+      targetPort: 5000
 EOF
+
+# 获取CLB地址
+echo "等待CLB分配(约1分钟)..."
+sleep 60
+CLB_IP=$(kubectl get svc clb-direct-pod -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo "测试地址: http://$CLB_IP"
 ```
 
 ### 验证脚本（verify.sh）
 ```
+# 验证脚本 (verify.sh)
 #!/bin/bash
 CLB_IP=$(kubectl get svc clb-direct-pod -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo "验证结果:"
 curl -s http://$CLB_IP | grep remote_addr
+echo "客户端真实IP显示在 remote_addr 字段"
 ```
 
 ### 清理脚本（cleanup.sh）
 ```
+# 清理脚本 (cleanup.sh)
 #!/bin/bash
 kubectl delete svc clb-direct-pod
 kubectl delete deploy real-ip-demo
