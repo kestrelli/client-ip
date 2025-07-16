@@ -6,7 +6,7 @@
 - 基于IP的访问控制策略
 - 实时风控和日志分析场景
 
->​**核心价值**​：解决传统NodePort模式源IP丢失问题，降低网络延迟
+>​**核心价值**​：解决传统NodePort模式源IP丢失问题
 
 ## 前提条件
 
@@ -32,7 +32,7 @@ chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 # 1. 下载项目
 git clone https://github.com/kestrelli/client-ip
 cd client-ip
-cd 'GlobalRouter-CLB directly connect'
+cd 'gr-clb-direct-pod'
 # 2. 授权执行权限
 chmod +x *.sh
 # 3. 一键部署
