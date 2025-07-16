@@ -145,12 +145,15 @@ annotations:
 sed -i 's|vickytan-demo.tencentcloudcr.com|your-registry.com/your-image|g' deploy.sh
 ```
 
+
  **故障排查**​
 	|现象|检查命令|
 	|:-:|:-:|
 	|无公网IP|`kubectl describe svc clb-direct-pod`|
 	|Pod未运行|`kubectl describe pod -l app=real-ip-app`|
 	|直连未生效|`kubectl get cm -n kube-system tke-service-controller-config -o yaml`|
+
+
 
 
 完整项目结构：
