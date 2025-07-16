@@ -33,8 +33,9 @@ kubectl config set-cluster tke-cluster --server=https://xxxxxx
 
 ```
 # 1. 下载项目
-git clone https://github.com/yourname/tke-clb-direct-pod
-cd tke-clb-direct-pod
+git clone https://github.com/kestrelli/client-ip
+cd client-ip
+cd 'GlobalRouter-CLB directly connect'
 # 2. 授权执行权限
 chmod +x *.sh
 # 3. 一键部署
