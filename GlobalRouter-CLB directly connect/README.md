@@ -73,52 +73,15 @@ chmod +x *.sh
 kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{"GlobalRouteDirectAccess":"true"}}'
 
 # 创建业务负载
-cat <<EOF | kubectl apply -f -
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: real-ip-demo
-  labels:
-    app: real-ip-app
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: real-ip-app
-  template:
-    metadata:
-      labels:
-        app: real-ip-app
-    spec:
-      containers:
-      - name: real-ip-container
-        image: vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0
-        ports:
-        - containerPort: 5000
-EOF
+kubectl apply -f deployment.yaml
 
 # 创建直连Service
-cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: Service
-metadata:
-  name: clb-direct-pod
-  annotations:
-    service.cloud.tencent.com/direct-access: "true"
-    service.cloud.tencent.com/loadbalance-type: "OPEN"
-spec:
-  selector:
-    app: real-ip-app
-  type: LoadBalancer
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 5000
-EOF
+kubectl apply -f service.yaml
+
+# 实时监控状态
+watch -n 2 'kubectl get pods,svc -o wide'
 
 # 获取CLB地址
-echo "等待CLB分配(约1分钟)..."
-sleep 60
 CLB_IP=$(kubectl get svc clb-direct-pod -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo "测试地址: http://$CLB_IP"
 ```
@@ -127,6 +90,9 @@ echo "测试地址: http://$CLB_IP"
 ```
 # 验证脚本 (verify.sh)
 #!/bin/bash
+# 部署验证
+kubectl get pods  # 所有Pod状态为Running
+kubectl get svc   # clb-direct-pod服务有EXTERNAL-IP
 CLB_IP=$(kubectl get svc clb-direct-pod -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo "验证结果:"
 curl -s http://$CLB_IP | grep remote_addr
@@ -144,17 +110,10 @@ kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{
 
 ## 验证标准
 
-成功状态应满足：
-1. ​**部署验证**​
-```
-kubectl get pods  # 所有Pod状态为Running
-kubectl get svc   # clb-direct-pod服务有EXTERNAL-IP
-```
-
 ​**IP验证**​
 运行`./verify.sh`输出需包含：
 `{"remote_addr":"客户端真实公网IP"}`
->对比客户端真实IP（如访问ip.sb）必须一致
+>对比客户端真实IP必须一致
 
 1. **故障排查**​
 	|现象|检查命令|
@@ -182,13 +141,9 @@ annotations:
   来源: 仅允许业务IP段
 ```
 
-### 3. 资源监控
-```
-# 实时监控状态
-watch -n 2 'kubectl get pods,svc -o wide'
 ```
 
-### 4. 自定义业务镜像
+### 3. 自定义业务镜像
 
 ```
 # 修改deploy.sh中的镜像地址
@@ -197,7 +152,7 @@ sed -i 's|vickytan-demo.tencentcloudcr.com|your-registry.com/your-image|g' deplo
 
 完整项目结构：
 ```
-复制tke-clb-direct-pod/
+复制gr-clb-direct-pod/
 ├── deploy.sh      # 一键部署脚本  
 ├── verify.sh      # 验证脚本  
 ├── cleanup.sh     # 清理脚本  
