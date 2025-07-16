@@ -1,72 +1,120 @@
 
-**适用场景**​：腾讯云容器服务(TKE) + 超级节点 + VPC-CNI网络
-​
+## 项目概述
 
-**镜像版本**​：`vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`(可自设镜像替换)
+本开源项目提供一键式解决方案，在腾讯云容器服务（TKE）超级节点模式下，通过CLB直连Pod模式，获取客户端真实源IP。适用于审计、风控等对源IP敏感的场景。核心优势：
+- ​**一键部署**​：整合Deployment和Service创建，避免手动步骤。
+- ​**一键验证**​：自动获取CLB IP并测试源IP，确保业务实时生效。
+- ​**开箱即用**​：基于标准Kubernetes命令，无需复杂配置。
 
-### **一、背景**​
+通过三个脚本实现全流程管理：
+- `deploy.sh`：一键部署应用和Service
+- `verify.sh`：一键验证客户端源IP
+- `cleanup.sh`：一键清理资源
 
-当客户端通过CLB访问业务Pod时，默认请求源IP会被替换为节点IP。
+## 业务访问链路流程图
 
-本方案通过**CLB直连Pod**模式，无需NodePort转发层，使Pod直接获取客户端真实源IP，适用于对源IP敏感的审计、风控等业务场景。
-
-### **二、前置条件**​
-
- ​**1.集群环境**​
-- 已创建TKE集群，且启用**超级节点**​（控制台路径：节点管理 → 节点池 → 启用超级节点）
-- 集群网络模式为 ​**VPC-CNI**​（创建集群时需选择）
-
-​**2.资源与节点限制**​
-- 账户余额充足，无带宽限制
-- 在腾讯云 TKE（Tencent Kubernetes Engine）中，​超级节点（Super Node）​ 是一种无需用户管理节点底层资源的节点类型，它由腾讯云自动管理，用户无需登录节点本身进行操作。因此，​超级节点不支持直接通过 SSH（如使用 orca term 或其他终端工具）登录到节点本身进行命令行操作。
-
-### 三、操作流程
-
-#### ​**Step 1: 创建业务工作负载（Deployment）​**​
-
- ​**工作负载->Deplyment->YAML新建，创建`deployment.yaml`文件**​ 
-
- 代码指令已存放在deployment.yaml文件中
-
- **预期输出**​：
-```
-NAME  READY   STATUS    RESTARTS   AGE
-real-ip-demo-xxx-xxx 1/1 Running 0 xxs
-real-ip-demo-xxx-xxx 1/1 Running 0 xxs
-real-ip-demo-xxx-xxx 1/1 Running 0 xxs
-```
-
-#### **Step 2: 创建直连Pod模式的Service**​
-
-​**服务与路由->Service->YAML新建，创建`Service.yaml` 文件**​ 
-
-代码指令已存放在Service.yaml文件中
-
-#### **Step 3: 获取CLB节点IP**
-
-公网访问IP即为CLB节点IP
-
-​#### **Step 4: 验证真实源IP**​
-
-**通过curl测试**​
-```
-curl 119.91.243.11  # 替换为您的公网IP
+```mermaid
+graph LR
+    
+    A[客户端] -->|HTTP/HTTPS请求| B{流量入口}
+    B --> C[LB类型Service]
+    B --> D[LB类型Ingress]
+    
+    C -->|直连模式| E[业务Pod]
+    D -->|直连模式| E
+    
+    subgraph TKE集群
+        E[超级节点<br>VPC-CNI网络<br>业务Pod]
+    end
+    
+     A <--> |响应数据| E
+    
+    style A fill:#4CAF50,color:white
+    style B fill:#2196F3,color:white
+    style C fill:#FF9800,color:black
+    style D fill:#FF9800,color:black
+    style E fill:#9C27B0,color:white
 ```
 
-​**2.通过浏览器访问**​
-直接输入公网IP（如 `119.91.243.11`），页面将返回请求头信息，检查 `remote_addr` 是否为客户端公网IP。
+## 前置条件
 
-### **四、故障排查**​
+在执行一键操作前，确保您的环境满足以下要求：
+- ​**集群环境**​：- TKE集群已启用超级节点（控制台路径：节点管理 → 节点池 → 启用超级节点）。
+	- 集群网络模式为VPC-CNI（创建集群时需选择）。
+- ​**资源要求**​：- 腾讯云账户余额充足，无带宽限制（避免访问失败）。
+	- 安装并配置`kubectl`命令行工具，且已经配置集群访问凭证`kubeconfig`，连接TKE集群（通过`kubectl get nodes`命令，如果看到节点列表就说明可访问集群）。
+- ​**镜像说明**​：默认使用镜像 `vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`，您可在YAML文件中自定义替换。
+
+## 快速开始
+### 本次操作以LB类型svc为例，LB类型ingress同样适用于此业务场景
+
+### 步骤1：部署应用
+
+```
+# 1. 下载项目
+git clone https://github.com/kestrelli/client-ip.git
+cd client-ip
+cd super-clb-direct-pod
+# 2. 授权执行权限
+chmod +x *.sh
+# 3. 执行部署脚本（需要kubectl权限）
+./deploy.sh
+```
+部署过程约1分钟，自动完成：
+- 启用GlobalRoute直连模式
+- 创建业务负载(Deployment)
+- 配置直连Service
+- 获取CLB公网IP
+
+### 步骤2：验证源IP
+
+```
+# 运行验证脚本
+./verify.sh
+
+# 预期输出：
+验证结果：
+{"remote_addr":"106.55.163.108"} 
+客户端真实IP显示在 remote_addr 字段
+```
+
+### 步骤3：清理资源
+
+```
+# 执行清理脚本（需要kubectl权限）
+./cleanup.sh
+```
+
+## 验证标准
 
 
-|问题现象|排查方向|
+|验证项|成功标准|检查命令|
+|:-:|:-:|:-:|
+|​**部署状态**​|Deployment状态Available，Pod全部Running|`kubectl get deploy real-ip-app`<br>`kubectl get pods -l app=real-ip-app`|
+|​**Service状态**​|Service有公网IP|`kubectl get svc clb-direct-pod`|
+|​**源IP验证**​|返回真实客户端IP|`./verify.sh`|
+
+#### 自定义镜像
+```
+# 修改deploy.sh中的镜像地址
+sed -i 's|vickytan-demo.tencentcloudcr.com|your-registry.com|g' deploy.sh
+```
+
+## 故障排查
+
+
+|现象|解决方案|
 |:-:|:-:|
-|Pod状态非`Running`|1. 检查镜像地址是否正确<br>2. 检查 `containerPort` 是否匹配业务端口|
-|源IP仍是节点IP|1. 确认Service注解 `direct-access: "true"`|
-|无法访问公网IP|1. 检查安全组是否放通80端口<br>2. 确认账户余额/带宽未超限|
+|Pod状态异常|`kubectl describe pod <pod-name>`<br>`kubectl logs <pod-name>`|
+|Service无公网IP|检查账户余额和CLB配额|
+|获取到节点IP|确认Service注解 `direct-access: "true"`|
+|访问超时|检查安全组规则和网络ACL|
+## 项目结构
 
-### ​**五、清理资源**​
 ```
-集群控制台删除Service
-集群控制台删除Deployment
+复制super-clb-direct-pod/
+├── deploy.sh       # 一键部署脚本
+├── verify.sh       # 验证脚本
+├── cleanup.sh      # 清理脚本
+├── README.md       # 本文档
 ```
