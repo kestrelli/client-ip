@@ -21,9 +21,8 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 ```
 3.​**集群凭证**
-```
+
 [连接集群](https://cloud.tencent.com/document/product/457/39814)
-```
 
 ## 快速开始
 
