@@ -9,7 +9,7 @@
 
 >​**核心价值**​：通过CLB直连Pod，源IP保留率可达100%，验证输出 {"remote_addr":"172.19.0.65"} 直接体现客户端真实公网IP，非节点IP（如42.194.172.41）。
 
-## 详细业务访问链路流程图
+## 业务访问链路流程图
 
 ```mermaid
 graph LR
@@ -53,6 +53,8 @@ chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 集群访问凭证说明：请参考[连接集群](https://cloud.tencent.com/document/product/457/39814)
 
 ## 快速开始
+
+### 本次操作以LB类型svc为例，LB类型ingress同样适用于此业务场景
 
 ### 步骤1：部署应用
 
