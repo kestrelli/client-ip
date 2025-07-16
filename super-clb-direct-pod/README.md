@@ -66,6 +66,9 @@ chmod +x *.sh
 - 配置直连Service
 - 获取CLB公网IP
 
+![复刻仓库文件](images/pod1.png)
+![部署](images/pod2.png)
+
 ### 步骤2：验证源IP
 
 ```
@@ -77,6 +80,7 @@ chmod +x *.sh
 {"remote_addr":"106.55.163.108"} 
 客户端真实IP显示在 remote_addr 字段
 ```
+![运行](images/pod3.png)
 
 ### 步骤3：清理资源
 
@@ -84,6 +88,7 @@ chmod +x *.sh
 # 执行清理脚本（需要kubectl权限）
 ./cleanup.sh
 ```
+![清理](images/pod4.png)
 
 ## 验证标准
 
