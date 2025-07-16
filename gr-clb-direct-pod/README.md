@@ -32,7 +32,7 @@ chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 # 1. 下载项目
 git clone https://github.com/kestrelli/client-ip.git
 cd client-ip
-cd 'gr-clb-direct-pod'
+cd gr-clb-direct-pod
 # 2. 授权执行权限
 chmod +x *.sh
 # 3. 一键部署
