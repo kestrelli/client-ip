@@ -9,6 +9,33 @@
 
 >​**核心价值**​：通过CLB直连Pod，源IP保留率可达100%，验证输出 {"remote_addr":"172.19.0.65"} 直接体现客户端真实公网IP，非节点IP（如42.194.172.41）。
 
+## 详细业务访问链路流程图
+
+```mermaid
+graph LR
+    
+    A[客户端] -->|HTTP/HTTPS请求| B{流量入口}
+    B --> C[LB类型Service]
+    B --> D[LB类型Ingress]
+    
+    C -->|直连模式| E[业务Pod]
+    D -->|直连模式| E
+    
+    subgraph TKE集群
+        E[GlobalRouter网络<br>业务Pod]
+    end
+    
+     A <--> |响应数据| E
+    
+    style A fill:#4CAF50,color:white
+    style B fill:#2196F3,color:white
+    style C fill:#FF9800,color:black
+    style D fill:#FF9800,color:black
+    style E fill:#9C27B0,color:white
+```
+
+
+
 ## 前提条件
 
 1. ​**TKE集群**​
