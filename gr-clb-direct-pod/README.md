@@ -59,6 +59,7 @@ chmod +x *.sh
 {"remote_addr":"106.55.163.108"} 
 客户端真实IP显示在 remote_addr 字段
 ```
+![源IP验证](images/pod9.png)
 
 ### 步骤3：清理资源
 ```
