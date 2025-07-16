@@ -73,6 +73,9 @@ chmod +x deploy.sh verify.sh cleanup.sh
 - 配置直连Service
 - 获取CLB公网IP
 
+![复刻仓库文件](images/pod1.png)
+![部署](images/pod2.png)
+
 ### 步骤2：验证源IP
 ```
 # 运行验证脚本
@@ -82,12 +85,14 @@ chmod +x deploy.sh verify.sh cleanup.sh
 {"remote_addr":"10.15.17.26"} 
 客户端真实IP显示在 remote_addr 字段
 ```
+![验证](images/pod3.png)
 
 ### 步骤3：清理资源
 ```
 # 运行清除脚本
 ./cleanup.sh
 ```
+![清除](images/pod4.png)
 
 ## ✅ 验证标准
 
