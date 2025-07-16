@@ -111,6 +111,8 @@ kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{
 ## 验证标准
 
 ​**IP验证**
+
+
 ​
 运行`./verify.sh`输出需包含：
 `{"remote_addr":"客户端真实公网IP"}`
