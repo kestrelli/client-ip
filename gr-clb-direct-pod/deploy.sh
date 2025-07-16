@@ -10,9 +10,7 @@ kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 
 
-# 实时监控状态
-watch -n 2 'kubectl get pods,svc -o wide'
-
 # 获取CLB地址
+sleep 30
 CLB_IP=$(kubectl get svc clb-direct-pod -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo "测试地址: http://$CLB_IP"
