@@ -40,6 +40,8 @@ chmod +x *.sh
 ```
 ![克隆仓库](images/pod7.png)
 
+![部署验证](images/pod8.png)
+
 部署过程约1分钟，自动完成：
 - 启用GlobalRoute直连模式
 - 创建业务负载(Deployment)
