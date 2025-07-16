@@ -22,9 +22,7 @@ chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 ```
 3.​**集群凭证**
 ```
-# 从TKE控制台获取凭证命令（示例）
-kubectl config set-credentials default-admin --token=xxxxxx
-kubectl config set-cluster tke-cluster --server=https://xxxxxx
+[连接集群](https://cloud.tencent.com/document/product/457/39814)
 ```
 
 ## 快速开始
