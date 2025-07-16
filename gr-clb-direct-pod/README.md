@@ -66,6 +66,7 @@ chmod +x *.sh
 # 一键清理（删除Service/Deployment并关闭直连模式）
 ./cleanup.sh
 ```
+![清理验证](images/pod10.png)
 
 ## 关键配置说明
 
@@ -81,8 +82,6 @@ kubectl apply -f deployment.yaml
 
 # 创建直连Service
 kubectl apply -f service.yaml
-
-
 
 # 获取CLB地址
 sleep 30
