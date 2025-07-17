@@ -69,7 +69,7 @@ graph LR
 
 ```
 # 获取项目代码
-git clone git clone https://github.com/kestrelli/client-ip.git 
+git clone https://github.com/kestrelli/client-ip.git 
 cd client-ip
 cd gr-clb-non-direct-pod
 # 授予执行权限
