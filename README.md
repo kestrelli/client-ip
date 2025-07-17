@@ -27,6 +27,7 @@
 |​**非直连Pod**​|兼容存量业务，无需重构|传统业务迁移|
 
 
+
 ### 🧩 五大场景对比
 
 
@@ -37,6 +38,9 @@
 |**场景3**|VPC-CNI|直连|超级节点|direct-access: true，天然支持直连|
 |**场景4**|VPC-CNI|非直连|原生节点|type: NodePort + ingress.class: qcloud |
 |**场景5**|GlobalRouter|非直连|原生节点|type: NodePort + ingress.class: qcloud |
+
+### 📊 部署流程总图
+![部署流程总图](部署流程总图.png)
 
 ## 🔧 业务场景配置举例说明
 
