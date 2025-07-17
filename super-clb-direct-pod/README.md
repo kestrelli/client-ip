@@ -77,7 +77,7 @@ chmod +x *.sh
 
 # 预期输出：
 验证结果：
-{"remote_addr":"106.55.163.108"} 
+{"remote_addr":"172.18.0.1"} 
 客户端真实IP显示在 remote_addr 字段
 ```
 ![运行](images/pod3.png)
