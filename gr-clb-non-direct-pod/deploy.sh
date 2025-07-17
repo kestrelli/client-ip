@@ -12,6 +12,7 @@ kubectl apply -f svc.yaml
 kubectl apply -f ingress.yaml
 
 # 获取Ingress公网IP  
+sleep 30  
 INGRESS_IP=$(kubectl get ingress real-ip-ingress -n kestrel-catchip -o jsonpath='{.status.loadBalancer.ingress[0].ip}')  
 
 echo "测试地址: http://$INGRESS_IP"
