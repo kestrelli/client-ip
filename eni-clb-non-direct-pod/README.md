@@ -84,6 +84,9 @@ chmod +x deploy.sh verify.sh cleanup.sh
 - 配置Ingress路由 
 - 获取ingress公网IP
 
+![复刻仓库文件](images/pod1.png)
+![部署](images/pod2.png)
+
 ### 步骤2：验证源IP
 
 ```
@@ -95,12 +98,16 @@ X-Forwarded-For: 106.55.163.108
 X-Real-Ip: 106.55.163.108  
 ```
 
+![验证](images/pod3.png)
+
 ### 步骤3：清理资源
 
 ```
 # 运行清除脚本
 ./cleanup.sh
 ```
+
+![清除](images/pod4.png)
 
 ----
 
