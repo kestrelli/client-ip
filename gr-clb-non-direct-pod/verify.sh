@@ -1,4 +1,3 @@
-!/bin/bash  
 # 检查Pod状态
 kubectl get pods -n kestrel-catchip -l app=real-ip-app
 
