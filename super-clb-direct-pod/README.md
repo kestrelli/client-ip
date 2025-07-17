@@ -43,7 +43,7 @@ graph LR
 	- 集群网络模式为VPC-CNI（创建集群时需选择）。
 - ​**资源要求**​：- 腾讯云账户余额充足，无带宽限制（避免访问失败）。
 	- 安装并配置`kubectl`命令行工具，且已经配置集群访问凭证`kubeconfig`，连接TKE集群（通过`kubectl get nodes`命令，如果看到节点列表就说明可访问集群）。
-- ​**镜像说明**​：默认使用镜像 `vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`，您可在YAML文件中自定义替换。
+- ​**镜像说明**​：默认使用镜像 `vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`，您可在./deploy.sh文件中自定义替换。
 
 ## 快速开始
 ### 本次操作以LB类型svc为例，LB类型ingress同样适用于此业务场景
