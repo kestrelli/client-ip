@@ -53,9 +53,9 @@ graph LR
   chmod +x kubectl && sudo mv kubectl /usr/local/bin/  
 
 ##### 1.3 集群凭证  
-- 请将集群API sever中的 kubeconfig 文件内容保存到 ~/.kube/config（或替换原有文件），然后直接运行 kubectl get nodes命令，如果看到节点列表就说明可访问集群。
+获取集群访问凭证说明：请参考[连接集群](https://cloud.tencent.com/document/product/457/39814)
 
-### 2. 业务镜像
+### 2. 业务测试镜像
 
 - ​**默认镜像**​：`vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`
 - ​**自定义镜像**​：需修改`deploy.sh`中的镜像地址
