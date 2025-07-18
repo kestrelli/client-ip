@@ -53,7 +53,7 @@ graph LR
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 ```
-3.​**集群凭证**
+3.​ **集群凭证**
 
 集群访问凭证说明：请参考[连接集群](https://cloud.tencent.com/document/product/457/39814)
 
