@@ -43,7 +43,7 @@ graph LR
 	- 集群网络模式为VPC-CNI（创建集群时需选择）。
 - ​**资源要求**​：腾讯云账户余额充足，无带宽限制（避免访问失败）。
 	- 获取集群访问凭证说明：请参考[连接集群](https://cloud.tencent.com/document/product/457/39814)
-- ​**镜像说明**​：默认使用镜像 `vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`，您可在./deploy.sh文件中自定义替换。
+- ​**镜像说明**​：默认使用测试镜像 `vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`，您可在./deploy.sh文件中自定义替换。
 
 ## 快速开始
 ### 本次操作以LB类型svc为例，LB类型ingress同样适用于此业务场景
@@ -99,7 +99,7 @@ chmod +x *.sh
 |​**Service状态**​|Service有公网IP|`kubectl get svc clb-direct-pod`|
 |​**源IP验证**​|返回真实客户端IP|`./verify.sh`|
 
-#### 自定义镜像
+#### 自定义业务测试镜像
 ```
 # 修改deploy.sh中的镜像地址
 sed -i 's|vickytan-demo.tencentcloudcr.com|your-registry.com|g' deploy.sh
