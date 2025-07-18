@@ -128,7 +128,7 @@ sed -i 's|vickytan-demo.tencentcloudcr.com|your-registry.com/your-image|g' deplo
 
 
 
-完整项目结构：
+## 项目结构
 ```
 复制gr-clb-direct-pod/
 ├── deploy.sh      # 一键部署脚本  
