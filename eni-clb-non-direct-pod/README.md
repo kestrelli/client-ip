@@ -13,7 +13,7 @@
 - `cleanup.sh`：一键清理资源
 
 ### 关键原理：
-- 镜像直接处理请求，返回 `X-Forwarded-For` 和 `X-Real-IP` 头。
+- 镜像直接处理请求，返回 `X-Forwarded-For`  头。
 - Ingress启用腾讯云CLB七层转发（通过 `ingressClassName: qcloud`）。
 
 ### 业务访问链路流程图
@@ -60,7 +60,7 @@ graph LR
 - 测试命令：`docker pull test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0`
 
 4. **业务测试镜像**
-- ​**默认镜像**​：`test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0 `
+- ​**默认测试镜像**​：`test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0 `
 - ​**自定义镜像**​：需修改`deploy.sh`中的镜像地址
 
 ## 🚀 快速开始
