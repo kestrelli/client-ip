@@ -126,8 +126,8 @@ X-Real-Ip: 106.55.163.108
 # 修改deploy.sh中的镜像地址  
 sed -i 's|test-angel01.tencentcloudcr.com|your-registry.com|g' deploy.sh  
 ```
+## 项目结构
 ```
-📂 项目结构
 复制gr-clb-non-direct-pod/  
 ├── deploy.sh        # 一键部署脚本  
 ├── verify.sh        # 验证脚本  
