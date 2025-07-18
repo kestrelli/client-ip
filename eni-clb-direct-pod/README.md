@@ -57,7 +57,7 @@ graph LR
 
 ### 2. 业务测试镜像
 
-- ​**默认镜像**​：`vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`
+- ​**默认测试镜像**​：`vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`
 - ​**自定义镜像**​：需修改`deploy.sh`中的镜像地址
 
 ## 🚀 快速开始
