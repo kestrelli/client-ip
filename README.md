@@ -34,8 +34,8 @@
 |**场景**|**网络模式**|**连接方式**|**节点类型**|**核心特征**|
 |:-:|:-:|:-:|:-:|:-:|
 |**场景1**|VPC-CNI|直连|原生节点|direct-access: true |
-|**场景2**|GlobalRouter|直连|原生节点|GlobalRouteDirectAccess=true |
-|**场景3**|VPC-CNI|直连|超级节点|direct-access: true，天然支持直连|
+|**场景2**|GlobalRouter|直连|原生节点|GlobalRouteDirectAccess=true,direct-access: true|
+|**场景3**|VPC-CNI|直连|超级节点|天然支持直连|
 |**场景4**|VPC-CNI|非直连|原生节点|type: NodePort + ingress.class: qcloud |
 |**场景5**|GlobalRouter|非直连|原生节点|type: NodePort + ingress.class: qcloud |
 
