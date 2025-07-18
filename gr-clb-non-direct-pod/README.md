@@ -93,8 +93,7 @@ chmod +x deploy.sh verify.sh cleanup.sh
 ./verify.sh
 # 预期输出：
 验证结果：
-X-Forwarded-For: 106.55.163.108
-X-Real-Ip: 106.55.163.108  
+X-Forwarded-For: 106.55.163.108 
 ```
 ![验证](images/pod3.png)
 
@@ -113,8 +112,8 @@ X-Real-Ip: 106.55.163.108
 
 |验证项|成功标准|检查命令|
 |:-:|:-:|:-:|
-|​**部署状态**​|所有资源创建成功|`kubectl get all -n kestrelli`|
-|​**Ingress状态**​|Ingress有公网IP|`kubectl get ingress -n kestrelli`|
+|​**部署状态**​|所有资源创建成功|`kubectl get all -n kestrelli-catchip `|
+|​**Ingress状态**​|Ingress有公网IP|`kubectl get ingress -n kestrelli-catchip `|
 |​**源IP验证**​|返回X-Forwarded-For头|`./verify.sh`|
 
 
