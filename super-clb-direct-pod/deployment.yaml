@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: real-ip-demo
   labels:
-    app: real-ip-app  # 需与Service选择器匹配
+    app: real-ip-app    # 需与Service选择器匹配
 spec:
   replicas: 3
   selector:
@@ -14,8 +14,28 @@ spec:
       labels:
         app: real-ip-app
     spec:
+      # =====软性亲和性规则 =====
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:  # 软性规则
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: k8s.tencentcloud.com/node-type
+                operator: In
+                values:
+                - super  # 优先调度到超级节点
+      
+      # ===== 关键容忍度配置 =====
+      tolerations:
+      - key: "node.kubernetes.io/unschedulable"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "eks.tke.cloud.tencent.com/eklet"
+        operator: "Exists"
+        effect: "NoSchedule"
       containers:
       - name: real-ip-container
-        image: vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0  # 指定您的业务镜像
+        image: vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0    # 指定您的业务镜像
         ports:
-        - containerPort: 5000  # 必须与业务实际端口一致
+        - containerPort: 5000   # 必须与业务实际端口一致
