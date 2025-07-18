@@ -47,7 +47,7 @@ graph LR
 - 网络模式：VPC-CNI  
 - Kubernetes版本：≥ 1.20  
 
-###### 1.2 本地工具  
+##### 1.2 本地工具  
 - 安装kubectl（执行下方命令）：  
   curl -LO https://dl.k8s.io/release/v1.25.0/bin/linux/amd64/kubectl  
   chmod +x kubectl && sudo mv kubectl /usr/local/bin/  
