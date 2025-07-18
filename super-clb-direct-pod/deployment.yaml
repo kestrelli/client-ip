@@ -17,7 +17,7 @@ spec:
       # =====软性亲和性规则 =====
       affinity:
         nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:  # 软性规则
+          requiredDuringSchedulingIgnoredDuringExecution:  # 硬性规则
           - weight: 100
             preference:
               matchExpressions:
@@ -25,15 +25,8 @@ spec:
                 operator: In
                 values:
                 - super  # 优先调度到超级节点
-      
-      # ===== 关键容忍度配置 =====
-      tolerations:
-      - key: "node.kubernetes.io/unschedulable"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "eks.tke.cloud.tencent.com/eklet"
-        operator: "Exists"
-        effect: "NoSchedule"
+      nodeSelector:
+        node.kubernetes.io/instance-type: eklet
       containers:
       - name: real-ip-container
         image: vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0    # 指定您的业务镜像
