@@ -107,7 +107,14 @@ X-Forwarded-For: 106.55.163.108
 
 ![清除](images/pod4.png)
 
+## ✅ 验证标准
 
+
+|验证项|成功标准|检查命令|
+|:-:|:-:|:-:|
+|​**部署状态**​|所有资源创建成功|`kubectl get all -n kestrelli-catchip `|
+|​**Ingress状态**​|Ingress有公网IP|`kubectl get ingress -n kestrelli-catchip `|
+|​**源IP验证**​|返回X-Forwarded-For头|`./verify.sh`|
 
 
 ----
