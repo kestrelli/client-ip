@@ -18,9 +18,8 @@ spec:
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:  # 硬性规则
-          - weight: 100
-            preference:
-              matchExpressions:
+            nodeSelectorTerms:  # 添加必要的层级
+            - matchExpressions:
               - key: k8s.tencentcloud.com/node-type
                 operator: In
                 values:
