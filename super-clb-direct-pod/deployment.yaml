@@ -14,16 +14,6 @@ spec:
       labels:
         app: real-ip-app
     spec:
-      # =====亲和性规则 =====
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:  # 硬性规则
-            nodeSelectorTerms:  # 添加必要的层级
-            - matchExpressions:
-              - key: k8s.tencentcloud.com/node-type
-                operator: In
-                values:
-                - super  # 调度到超级节点
       nodeSelector:
         node.kubernetes.io/instance-type: eklet
       containers:
