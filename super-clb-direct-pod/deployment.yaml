@@ -15,7 +15,7 @@ spec:
         app: real-ip-app
     spec:
       nodeSelector:
-        node.kubernetes.io/instance-type: eklet
+        node.kubernetes.io/instance-type: eklet    #调度到超级节点
       containers:
       - name: real-ip-container
         image: vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0    # 指定您的业务镜像
