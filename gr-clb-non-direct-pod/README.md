@@ -120,7 +120,7 @@ X-Real-Ip: 106.55.163.108
 
 ----
 
-### 自定义业务镜像
+### 自定义业务测试镜像
 ```
 # 修改deploy.sh中的镜像地址  
 sed -i 's|test-angel01.tencentcloudcr.com|your-registry.com|g' deploy.sh  
