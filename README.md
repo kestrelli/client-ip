@@ -129,21 +129,30 @@ spec:
 
 ### 场景4：VPC-CNI非直连pod（原生节点）​​
 ```
-# 以service.yaml文件配置为例
+# 以ingress.yaml文件配置为例
 # 核心特征
+# ingress.class: qcloud​：这是必须的注解，缺少此注解会导致源 IP 丢失
 # 通过X-Forwarded-For请求头获取源IP
+# Service类型必须为NodePort
 
-apiVersion: v1
-kind: Service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: real-ip-service
+  name: real-ip-ingress
+  namespace: kestrel-catchip  # 替换为您的命名空间（如 default 或自定义）
+  annotations:
+    kubernetes.io/ingress.class: qcloud  # 核心注解：启用腾讯云 CLB 七层转发
 spec:
-  selector:
-    app: real-ip-app
-  type: NodePort  # 非直连必需
-  ports:
-    - port: 80
-      targetPort: 5000  # 指向Flask业务端口
+  rules:
+  - http:
+      paths:
+      - path: /  # 路由路径，根据业务调整（如 /api）
+        pathType: Prefix
+        backend:
+          service:
+            name: real-ip-service  # 必须匹配您的 Service 名称
+            port:
+              number: 80  # Service 端口，与 service.yaml 中 port 一致
 ```
 
 
@@ -154,20 +163,28 @@ spec:
 ```
 # 以service.yaml文件配置为例
 # 核心特征​​
+# ingress.class: qcloud​：这是必须的注解，缺少此注解会导致源 IP 丢失
 # 通过X-Forwarded-For头传递源IP
 # Service类型必须为NodePort
 
-apiVersion: v1
-kind: Service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: real-ip-service
+  name: real-ip-ingress
+  namespace: kestrel-catchip  # 替换为您的命名空间（如 default 或自定义）
+  annotations:
+    kubernetes.io/ingress.class: qcloud  # 核心注解：启用腾讯云 CLB 七层转发
 spec:
-  selector:
-    app: real-ip-app
-  type: NodePort  # 非直连必需
-  ports:
-    - port: 80
-      targetPort: 5000
+  rules:
+  - http:
+      paths:
+      - path: /  # 路由路径，根据业务调整（如 /api）
+        pathType: Prefix
+        backend:
+          service:
+            name: real-ip-service  # 必须匹配您的 Service 名称
+            port:
+              number: 80  # Service 端口，与 service.yaml 中 port 一致
 ```
 
 
