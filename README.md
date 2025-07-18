@@ -161,7 +161,7 @@ spec:
 ### 场景5：GlobalRouter非直连pod（原生节点）
 
 ```
-# 以service.yaml文件配置为例
+# 以ingress.yaml文件配置为例
 # 核心特征​​
 # ingress.class: qcloud​：这是必须的注解，缺少此注解会导致源 IP 丢失
 # 通过X-Forwarded-For头传递源IP
