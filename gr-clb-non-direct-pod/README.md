@@ -53,13 +53,12 @@ graph LR
 - curl  
 
 ### 3. 账户要求  
-- 已开通CLB服务  
-- 安全组放通80端口  
--  将集群API sever中的 kubeconfig 文件内容保存到 ~/.kube/config（或替换原有文件），然后直接运行 kubectl get nodes命令，如果看到节点列表就说明可访问集群
+- 已开通CLB服务   
+- 获取集群访问凭证说明：请参考[连接集群](https://cloud.tencent.com/document/product/457/39814)
 
-### 4. 业务镜像
+### 4. 业务测试镜像
 
-- ​**默认镜像**​：`test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0 `
+- ​**默认测试镜像**​：`test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0 `
 - ​**自定义镜像**​：需修改`deploy.sh`中的镜像地址
 
 ----
