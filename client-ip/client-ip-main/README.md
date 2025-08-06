@@ -40,7 +40,7 @@
 |**场景5**|GlobalRouter|非直连|原生节点|type: NodePort + ingress.class: qcloud |
 
 ### 📊 部署流程总图
-![部署流程总图](/images/部署流程总图.png)
+![部署流程总图](/部署流程总图.png)
 
 ## 🔧 业务场景配置举例说明
 
