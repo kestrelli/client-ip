@@ -101,21 +101,21 @@ Client real IP displayed in remote_addr field
 
 
 
-## ✅ Verification Standards
+### ✅ Verification Standards
 
 **IP Validation**​
 Run `./verify.sh` - output must include:
 `{"remote_addr":"Client Real Public IP"}`
 >Must match actual client IP
 
-### **Custom Test Image**​
+#### **Custom Test Image**​
 
 ```
 # Modify image in deploy.sh
 sed -i 's|vickytan-demo.tencentcloudcr.com|your-registry.com/your-image|g' deploy.sh
 ```
 
-## Project Structure
+### 📦 Project Structure
 ```
 gr-clb-direct-pod/
 ├── deploy.sh      # Deployment script  
