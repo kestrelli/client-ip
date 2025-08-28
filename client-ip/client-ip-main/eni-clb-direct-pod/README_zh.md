@@ -13,7 +13,7 @@
 - `verify.sh`：一键验证客户端源IP
 - `cleanup.sh`：一键清理资源
 
-## 业务访问链路流程图​
+## 📡 业务访问链路流程图​
 
 ```mermaid
 graph LR
@@ -102,8 +102,7 @@ chmod +x deploy.sh verify.sh cleanup.sh
 ```
 ![清除](images/pod4.png)
 
-## ✅ 验证标准
-
+### ✅ 验证标准
 
 |验证阶段|成功标志|检查命令|
 |:-:|:-:|:-:|
