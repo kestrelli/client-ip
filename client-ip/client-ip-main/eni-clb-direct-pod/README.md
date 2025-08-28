@@ -101,13 +101,14 @@ Client real IP displayed in remote_addr field
 ```
 ![清除](images/pod4.png)
 
-## ✅  Verification Checklist
+### ✅  Verification Checklist
 |​**Stage**​|​**SuccessIndicator**​|​**CheckCommand**​|
 |:-:|:-:|:-:|
 |​**Deployed**​|CLB has public IP|`kubectl get svc clb-direct-pod`|
 |​**Direct Access**|Annotation shows `direct-access: true`|`kubectl describe svc clb-direct-pod`|
 |​**Correct IP**​|Returned IP ≠ Node IP|`./verify.sh`|
 |​**Cleaned Up**​|No related resources|`kubectl get svc,deploy`|
+
 ### 📦 Project Structure
 ```
 eni-clb-direct-pod/  
