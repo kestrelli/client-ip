@@ -1,31 +1,36 @@
+[English](README.md) | [中文](README_zh.md)
 
+## 📌 概述
 
-## 📌  **Overview**​
+本方案通过腾讯云TKE的**VPC-CNI网络模式**实现CLB直接访问业务Pod，确保业务应用获取100%真实的客户端源IP。使用本方案可：
+- 解决传统NodePort模式源IP丢失问题
+- 满足金融、电商等场景的安全审计需求
 
-This solution leverages Tencent Cloud TKE's ​**VPC-CNI network mode**​ to enable CLB direct access to business Pods, ensuring 100% preservation of the client's real source IP. Benefits include:
--  Resolving source IP loss in traditional NodePort mode
-- Meeting security audit requirements for finance, e-commerce, and regulated industries
+>​**核心价值**​：通过三个脚本实现全流程自动化管理，部署到验证仅需几分钟
 
->**Core Value**: Full automation via three scripts - deployment to validation in minutes
+通过三个脚本实现全流程管理：
+- `deploy.sh`：一键部署应用和Service
+- `verify.sh`：一键验证客户端源IP
+- `cleanup.sh`：一键清理资源
 
-**Automation Workflow**:
- - `deploy.sh`: One-click application and Service deployment
-- `verify.sh`: One-click client source IP validation
-- `cleanup.sh`: One-click resource cleanup
-
-## 📡 Business Access Flow
+## 业务访问链路流程图​
 
 ```mermaid
-graph LR    
-    A[Client] -->|HTTP/HTTPS Request| B{Traffic Entry}
-    B --> C[LB-Type Service]
-    B --> D[LB-Type Ingress]
-    C -->|Direct Mode| E[Business Pod]
-    D -->|Direct Mode| E
-    subgraph TKE Cluster
-        E[VPC-CNI Network<br>Business Pod]
+graph LR
+    
+    A[客户端] -->|HTTP/HTTPS请求| B{流量入口}
+    B --> C[LB类型Service]
+    B --> D[LB类型Ingress]
+    
+    C -->|直连模式| E[业务Pod]
+    D -->|直连模式| E
+    
+    subgraph TKE集群
+        E[VPC-CNI网络<br>业务Pod]
     end
-    A <--> |Response Data| E
+    
+     A <--> |响应数据| E
+    
     style A fill:#4CAF50,color:white
     style B fill:#2196F3,color:white
     style C fill:#FF9800,color:black
@@ -35,83 +40,83 @@ graph LR
 
 
 
-## 🛠️  Prerequisites
+## 🛠️ 前提条件
 
-### 1. Environment Preparation
+### 1. 环境准备
 
-##### 1.1 **TKE Cluster Requirements**​ 
- - Network Mode: VPC-CNI
-- Kubernetes Version: ≥ 1.20
+##### 1.1 TKE集群要求  
+- 网络模式：VPC-CNI  
+- Kubernetes版本：≥ 1.20  
 
-##### **1.2 Local Tools**​
-Install kubectl:
+##### 1.2 本地工具  
+- 安装kubectl（执行下方命令）：  
   curl -LO https://dl.k8s.io/release/v1.25.0/bin/linux/amd64/kubectl  
   chmod +x kubectl && sudo mv kubectl /usr/local/bin/  
 
-##### 1.3 **Cluster Credentials**​ 
-Obtain cluster access credentials: Refer to [Connecting to Clusters](https://cloud.tencent.com/document/product/457/39814)
+##### 1.3 集群凭证  
+获取集群访问凭证说明：请参考[连接集群](https://cloud.tencent.com/document/product/457/39814)
 
-### 2. Test Images
+### 2. 业务测试镜像
 
-- **Default Image**: `vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`
-- **Custom Image**: Modify image address in `deploy.sh`
+- ​**默认测试镜像**​：`vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`
+- ​**自定义镜像**​：需修改`deploy.sh`中的镜像地址
 
-## 🚀  Quick Start
+## 🚀 快速开始
 
-##### This demo uses LB-type Service. LB-type Ingress follows the same workflow.
+### 本次操作以LB类型svc为例，LB类型ingress同样适用于此业务场景
 
-###  Step 1: Deploy Application
+### 步骤1：部署应用
 ```
-# Clone project
-git clone https://github.com/kestrelli/client-ip.git 
-cd client-ip/eni-clb-direct-pod
-
-# Grant execution permissions
+# 获取项目代码
+git clone git clone https://github.com/kestrelli/client-ip.git 
+cd client-ip
+cd eni-clb-direct-pod
+# 授予执行权限
 chmod +x deploy.sh verify.sh cleanup.sh 
-
-# One-click deployment
+# 一键部署
 ./deploy.sh  
 ```
-Deployment completes in ~1 minute, automatically creating:
- - Business Deployment
-- Direct-access Service
-- CLB public IP
+部署过程约1分钟，自动完成：
+- 创建业务负载(Deployment)
+- 配置直连Service
+- 获取CLB公网IP
 
 ![复刻仓库文件](images/pod1.png)
 ![部署](images/pod2.png)
 
-###  Step 2: Verify Source IP
+### 步骤2：验证源IP
 ```
-# Run verification
+# 运行验证脚本
 ./verify.sh
-
-# Expected Output:
-Verification Result:
+# 预期输出：
+验证结果：
 {"remote_addr":"10.15.17.26"} 
-Client real IP displayed in remote_addr field
+客户端真实IP显示在 remote_addr 字段
 ```
 ![验证](images/pod3.png)
 
-###  Step 3: Cleanup Resources
+### 步骤3：清理资源
 ```
-# Run cleanup
+# 运行清除脚本
 ./cleanup.sh
 ```
 ![清除](images/pod4.png)
 
-## ✅  Verification Checklist
-|​**Stage**​|​**SuccessIndicator**​|​**CheckCommand**​|
+## ✅ 验证标准
+
+
+|验证阶段|成功标志|检查命令|
 |:-:|:-:|:-:|
-|​**Deployed**​|CLB has public IP|`kubectl get svc clb-direct-pod`|
-|​**Direct Access**|Annotation shows `direct-access: true`|`kubectl describe svc clb-direct-pod`|
-|​**Correct IP**​|Returned IP ≠ Node IP|`./verify.sh`|
-|​**Cleaned Up**​|No related resources|`kubectl get svc,deploy`|
-### 📦 Project Structure
+|​**部署完成**​|CLB有公网IP|kubectl get svc clb-direct-pod|
+|​**直连生效**​|注解显示direct-access: true|kubectl describe svc clb-direct-pod|
+|​**源IP正确**​|返回IP≠节点IP|./verify.sh|
+|​**清理完成**​|无相关资源|kubectl get svc,deploy|
+
+### 📦 项目结构
 ```
 eni-clb-direct-pod/  
-├── deploy.sh       # Deployment script  
-├── verify.sh       # Verification script  
-├── cleanup.sh      # Cleanup script  
-├── README.md       # Documentation  
-└── images/         # Screenshots directory
+├── deploy.sh       # 一键部署脚本  
+├── verify.sh       # 验证脚本  
+├── cleanup.sh      # 清理脚本  
+├── README.md       # 本文档 
 ```
