@@ -41,6 +41,7 @@
 
 ### 📊 部署流程总图
 ![部署流程总图](部署流程总图.png)
+```
 graph TD
     Start[开始] --> NetworkMode{选择网络模式}
     
@@ -66,6 +67,7 @@ graph TD
     Scenario3 --> Verify
     Scenario4 --> Verify
     Scenario5 --> Verify
+```
 
 ## 🔧 业务场景配置举例说明
 
