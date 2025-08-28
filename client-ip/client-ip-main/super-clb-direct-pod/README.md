@@ -45,7 +45,7 @@ Before execution, ensure your environment meets these requirements:
     - No bandwidth restrictions
 	- Obtain cluster credentials: refer to [Connecting to Clusters](https://cloud.tencent.com/document/product/457/39814)
 - ​**Image Specification**​：
-    - Default test image: `·vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`
+    - Default test image: `vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`
     - Customize in ./deploy.sh as needed
 
 ##  🚀 Quick Start
