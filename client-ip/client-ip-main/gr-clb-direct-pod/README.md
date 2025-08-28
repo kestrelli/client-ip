@@ -1,37 +1,33 @@
+[English](README.md) | [中文](README_zh.md)
 
-## 链路概述与价值​
+## **Link Overview & Value**
 
-在GlobalRouter网络模式下，CLB直连Pod的业务访问链路完全绕过传统NodePort转发层，实现端到端的源IP透传。此设计解决了Kubernetes环境中常见的源IP丢失问题（如NodePort模式的SNAT转换），特别适用于：
+In GlobalRouter network mode, the CLB-direct-to-Pod access path completely bypasses traditional NodePort forwarding, enabling end-to-end source IP preservation. This design resolves common Kubernetes source IP loss issues (e.g., SNAT conversion in NodePort mode), particularly suited for:
 
-- 安全审计场景​：精准记录客户端真实IP，满足合规要求（如GDPR）。
-- 实时风控系统​：基于IP的访问控制策略（如geo-blocking）。
-- 日志分析​：原始IP日志无需额外解析，提升ELK等管道效率。
+- **Security Auditing**: Accurately records client real IPs for compliance (e.g., GDPR)
+- **Real-time Risk Control**: Enables IP-based access policies (e.g., geo-blocking)
+- - **Log Analytics**: Preserves raw IP logs without additional parsing, improving ELK pipeline efficiency
 
->​**核心价值**​：通过CLB直连Pod，源IP保留率可达100%，验证输出 {"remote_addr":"172.19.0.65"} 直接体现客户端真实公网IP，非节点IP（如42.194.172.41）。
+>​**Core Value**: Achieves 100% source IP retention via CLB-direct-to-Pod. Verification output `{"remote_addr":"172.19.0.65"}` shows real client public IP, not node IP (e.g., 42.194.172.41).
 
-通过三个脚本实现全流程管理：
-- `deploy.sh`：一键部署应用和Service
-- `verify.sh`：一键验证客户端源IP
-- `cleanup.sh`：一键清理资源
+**Automation Workflow**:
+- `deploy.sh`: One-click application and Service deployment
+- `verify.sh`: One-click client source IP validation
+- `cleanup.sh`: One-click resource cleanup
 
-## 业务访问链路流程图
+##  📡 Business Access Flow
 
 ```mermaid
-graph LR
-    
-    A[客户端] -->|HTTP/HTTPS请求| B{流量入口}
-    B --> C[LB类型Service]
-    B --> D[LB类型Ingress]
-    
-    C -->|直连模式| E[业务Pod]
-    D -->|直连模式| E
-    
-    subgraph TKE集群
-        E[GlobalRouter网络<br>业务Pod]
+graph LR    
+    A[Client] -->|HTTP/HTTPS Request| B{Traffic Entry}
+    B --> C[LB-Type Service]
+    B --> D[LB-Type Ingress]
+    C -->|Direct Mode| E[Business Pod]
+    D -->|Direct Mode| E
+    subgraph TKE Cluster
+        E[GlobalRouter Network<br>Business Pod]
     end
-    
-     A <--> |响应数据| E
-    
+    A <--> |Response Data| E
     style A fill:#4CAF50,color:white
     style B fill:#2196F3,color:white
     style C fill:#FF9800,color:black
@@ -39,100 +35,91 @@ graph LR
     style E fill:#9C27B0,color:white
 ```
 
+##  🛠 Prerequisites
 
-
-## 前提条件
-
-1. ​**TKE集群**​
-	- Kubernetes版本 ≥ 1.20
-	- 网络模式 = GlobalRouter
-2. ​**本地环境**​
+1. **TKE Cluster**​
+	- Kubernetes version ≥ 1.20
+	- Network mode: GlobalRouter
+2. **Local Environment**​
 
 ```
-# 安装kubectl (已安装可跳过)
+# Install kubectl (skip if installed)
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 ```
-3. ​**集群凭证**
+3. **Cluster Credentials**​
 
-获取集群访问凭证说明：请参考[连接集群](https://cloud.tencent.com/document/product/457/39814)
+Obtain access credentials:[Connecting to Clusters](https://cloud.tencent.com/document/product/457/39814)
 
-## 快速开始
+##  🚀 Quick Start
 
-### 本次操作以LB类型svc为例，LB类型ingress同样适用于此业务场景
+##### This demo uses LB-type Service. LB-type Ingress follows the same workflow.
 
-### 步骤1：部署应用
+### Step 1: Deploy Application
 
 ```
-# 1. 下载项目
+# 1. Clone project
 git clone https://github.com/kestrelli/client-ip.git
-cd client-ip
-cd gr-clb-direct-pod
-# 2. 授权执行权限
+cd client-ip/gr-clb-direct-pod
+
+# 2. Grant execution permissions
 chmod +x *.sh
-# 3. 一键部署
+
+# 3. One-click deployment
 ./deploy.sh
 ```
-部署过程约1分钟，自动完成：
-- 启用GlobalRoute直连模式
-- 创建业务负载(Deployment)
-- 配置直连Service
-- 获取CLB公网IP
+Deployment completes in ~1 minute, automatically:
+- Enables GlobalRoute direct mode
+- Creates business Deployment
+- Configures direct-access Service
+- Obtains CLB public IP
 
 ![克隆仓库](images/pod7.png)
 
 ![部署验证](images/pod8.png)
 
 
-### 步骤2：验证源IP
+### Step 2: Verify Source IP
 
 ```
-# 运行验证脚本
+# Run verification
 ./verify.sh
 
-# 预期输出：
-验证结果：
+# Expected Output:
+Verification Result:
 {"remote_addr":"172.19.0.65"} 
-客户端真实IP显示在 remote_addr 字段
+Client real IP displayed in remote_addr field
 ```
 ![源IP验证](images/pod9.png)
 
-### 步骤3：清理资源
+### Step 3: Cleanup Resources
 ```
-# 一键清理（删除Service/Deployment并关闭直连模式）
+# One-click cleanup
 ./cleanup.sh
 ```
 ![清理验证](images/pod10.png)
 
 
 
-## 验证标准
+## ✅ Verification Standards
 
-​**IP验证**
+**IP Validation**​
+Run `./verify.sh` - output must include:
+`{"remote_addr":"Client Real Public IP"}`
+>Must match actual client IP
 
-
-​
-运行`./verify.sh`输出需包含：
-`{"remote_addr":"客户端真实公网IP"}`
->对比客户端真实IP必须一致
-	
-	
-
-
-### 自定义业务测试镜像
+### **Custom Test Image**​
 
 ```
-# 修改deploy.sh中的镜像地址
+# Modify image in deploy.sh
 sed -i 's|vickytan-demo.tencentcloudcr.com|your-registry.com/your-image|g' deploy.sh
 ```
 
-
-
-## 项目结构
+## Project Structure
 ```
-复制gr-clb-direct-pod/
-├── deploy.sh      # 一键部署脚本  
-├── verify.sh      # 验证脚本  
-├── cleanup.sh     # 清理脚本  
-└── README.md      # 本文档  
+gr-clb-direct-pod/
+├── deploy.sh      # Deployment script  
+├── verify.sh      # Verification script  
+├── cleanup.sh     # Cleanup script  
+└── README.md      # Documentation    
 ```
