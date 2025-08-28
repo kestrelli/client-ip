@@ -11,9 +11,8 @@ This solution leverages Tencent Cloud TKE's ​**GlobalRouter network mode**​ 
 - `verify.sh`: One-click client source IP validation
 - `cleanup.sh`: One-click resource cleanup
 
-----
 
-## 业务访问链路流程图
+## 📡 业务访问链路流程图
 
 ```mermaid
 graph LR    
@@ -102,7 +101,7 @@ X-Forwarded-For: 106.55.163.108
 ![清理](images/pod4.png)
 
 
-##  ✅ Verification Checklist
+###  ✅ Verification Checklist
 
 |​**Item**​|​**SuccessCriteria**​|​**CheckCommand**​|
 |:-:|:-:|:-:|
@@ -110,12 +109,12 @@ X-Forwarded-For: 106.55.163.108
 |​**Ingress Status**​|Ingress has public IP|`kubectl get ingress -n kestrelli-catchip`|
 |​**Source IP Validation**​|Returns X-Forwarded-For header|`./verify.sh`|
 
-### ​**Custom Test Image**​
+#### ​**Custom Test Image**​
 ```
 # Modify image in deploy.sh
 sed -i 's|test-angel01.tencentcloudcr.com|your-registry.com|g' deploy.sh 
 ```
-##  📦 Project Structure
+###  📦 Project Structure
 ```
 gr-clb-non-direct-pod/  
 ├── deploy.sh        # Deployment script  
