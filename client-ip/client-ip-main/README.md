@@ -41,6 +41,31 @@
 
 ### 📊 部署流程总图
 ![部署流程总图](部署流程总图.png)
+graph TD
+    Start[开始] --> NetworkMode{选择网络模式}
+    
+    NetworkMode -->|VPC-CNI| NodeTypeVPC{节点类型}
+    NetworkMode -->|GlobalRouter| NodeTypeGlobal{节点类型}
+    
+    NodeTypeVPC -->|超级节点| ConnectionMethodSuper{连接方式}
+    NodeTypeVPC -->|原生节点| ConnectionMethodNative{连接方式}
+    
+    NodeTypeGlobal -->|原生节点| ConnectionMethodGlobalNative{连接方式}
+    
+    ConnectionMethodSuper -->|直连| Scenario3[场景3: 超级节点直连]
+    
+    ConnectionMethodNative -->|直连| Scenario1[场景1: VPC-CNI直连]
+    ConnectionMethodNative -->|非直连| Scenario4[场景4: VPC-CNI非直连]
+    
+    ConnectionMethodGlobalNative -->|直连| Scenario2[场景2: GlobalRouter直连]
+    ConnectionMethodGlobalNative -->|非直连| Scenario5[场景5: GlobalRouter非直连]
+    
+    
+    Scenario1 --> Verify[验证源IP]
+    Scenario2 --> Verify
+    Scenario3 --> Verify
+    Scenario4 --> Verify
+    Scenario5 --> Verify
 
 ## 🔧 业务场景配置举例说明
 
