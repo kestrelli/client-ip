@@ -6,7 +6,7 @@ In GlobalRouter network mode, the CLB-direct-to-Pod access path completely bypas
 
 - **Security Auditing**: Accurately records client real IPs for compliance (e.g., GDPR)
 - **Real-time Risk Control**: Enables IP-based access policies (e.g., geo-blocking)
-- - **Log Analytics**: Preserves raw IP logs without additional parsing, improving ELK pipeline efficiency
+- **Log Analytics**: Preserves raw IP logs without additional parsing, improving ELK pipeline efficiency
 
 >​**Core Value**: Achieves 100% source IP retention via CLB-direct-to-Pod. Verification output `{"remote_addr":"172.19.0.65"}` shows real client public IP, not node IP (e.g., 42.194.172.41).
 
