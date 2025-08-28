@@ -1,5 +1,5 @@
 ##  TKE Real Client IP Preservation Guide
-
+[English](README.md) | [中文](README_zh.md)
 #### **Background & Necessity: Solving Critical Pain Points in Cloud-Native Environments**​**​
 
 In Tencent Kubernetes Engine (TKE), ​**preserving the client’s real source IP**​ is essential for security auditing, access control, logging, and analytics. However, the default Kubernetes networking model replaces the source IP with the node IP.
