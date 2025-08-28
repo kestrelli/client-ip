@@ -47,7 +47,7 @@ graph LR
 - ​**镜像说明**​：默认使用测试镜像 `vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`，您可在./deploy.sh文件中自定义替换。
 
 ## 🚀 快速开始
-### 本次操作以LB类型svc为例，LB类型ingress同样适用于此业务场景
+##### 本次操作以LB类型svc为例，LB类型ingress同样适用于此业务场景
 
 ### 步骤1：部署应用
 
