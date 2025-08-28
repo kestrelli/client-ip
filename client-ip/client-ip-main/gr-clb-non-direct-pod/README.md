@@ -1,35 +1,32 @@
+[English](README.md) | [中文](README_zh.md)
 
-​
-## 📌 概述
+## 📌  **Overview**​
 
-本方案在腾讯云TKE的GlobalRouter网络模式下，通过Ingress Controller实现七层负载均衡，获取客户端真实源IP。适用于需要从HTTP头中提取源IP的业务场景（如Web应用、API网关）。
->​**核心价值**​：解决非直连模式下源IP丢失问题，通过`X-Forwarded-For`头传递真实客户端IP
+This solution leverages Tencent Cloud TKE's ​**GlobalRouter network mode**​ with Ingress Controller to enable Layer 7 load balancing while preserving the client's real source IP. Ideal for business scenarios requiring source IP extraction from HTTP headers (e.g., web applications, API gateways).
 
-通过三个脚本实现全流程管理：
-- `deploy.sh`：一键部署应用和Service
-- `verify.sh`：一键验证客户端源IP
-- `cleanup.sh`：一键清理资源
+>**Core Value**: Resolves source IP loss in non-direct mode by passing real client IP through `X-Forwarded-For`header
+
+**Automation Workflow**:
+- `deploy.sh`: One-click application and Service deployment
+- `verify.sh`: One-click client source IP validation
+- `cleanup.sh`: One-click resource cleanup
 
 ----
 
 ## 业务访问链路流程图
 
 ```mermaid
-graph LR
-    
-    A[客户端] -->|HTTP/HTTPS请求| B{流量入口}
-    B --> C[LB类型Service]
-    B --> D[LB类型Ingress]
-    
-    C -->|非直连模式| E[Nodeport]
-    D -->|非直连模式| E[Nodeport]
-    E -->F[业务Pod]
-    subgraph TKE集群
-        F[GlobalRouter网络<br>业务Pod]
+graph LR    
+    A[Client] -->|HTTP/HTTPS Request| B{Traffic Entry}
+    B --> C[LB-Type Service]
+    B --> D[LB-Type Ingress]
+    C -->|Non-Direct Mode| E[NodePort]
+    D -->|Non-Direct Mode| E[NodePort]
+    E --> F[Business Pod]
+    subgraph TKE Cluster
+        F[GlobalRouter Network<br>Business Pod]
     end
-    
-     A <--> |响应数据| F
-    
+    A <--> |Response Data| F
     style A fill:#4CAF50,color:white
     style B fill:#2196F3,color:white
     style C fill:#FF9800,color:black
@@ -38,97 +35,91 @@ graph LR
     style F fill:#9C27B0,color:white
 ```
 
-----
+##  🛠 Prerequisites
 
-## 🛠️ 前提条件
+### 1. Cluster Requirements
 
-### 1. 集群要求
+- Network mode: GlobalRouter
+- Kubernetes version: ≥ 1.18
+- Ingress enabled
 
-- 网络模式：GlobalRouter  
-- Kubernetes版本：≥ 1.18  
-- 已启用Ingress功能  
+### 2. Required Tools
+- kubectl (v1.18+)
+- curl
 
-### 2. 必备工具
-- kubectl（v1.18+）  
-- curl  
+### 3.  Account Requirements  
+- CLB service activated   
+- Obtain cluster credentials:[Connecting to Clusters](https://cloud.tencent.com/document/product/457/39814)
 
-### 3. 账户要求  
-- 已开通CLB服务   
-- 获取集群访问凭证说明：请参考[连接集群](https://cloud.tencent.com/document/product/457/39814)
+### 4. Test Images
 
-### 4. 业务测试镜像
+- ​**Default Image**: `test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0`
+- ​**Custom Image**: Modify address in `deploy.sh`
 
-- ​**默认测试镜像**​：`test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0 `
-- ​**自定义镜像**​：需修改`deploy.sh`中的镜像地址
 
-----
-
-## 🚀 快速开始
-### 步骤1：部署应用
+## 🚀 Quick Start
+###  Step 1: Deploy Application
 
 ```
-# 获取项目代码
+# Clone project
 git clone https://github.com/kestrelli/client-ip.git 
-cd client-ip
-cd gr-clb-non-direct-pod
-# 授予执行权限
+cd client-ip/gr-clb-non-direct-pod
+
+# Grant execution permissions
 chmod +x deploy.sh verify.sh cleanup.sh 
-# 一键部署
+
+# One-click deployment
 ./deploy.sh  
 ```
-部署过程约1分钟，自动完成：
-- 创建命名空间
-- 部署业务负载(Deployment)
-- 配置Nodeport Service服务
-- 配置Ingress路由 
-- 获取ingress公网IP
+Deployment completes in ~1 minute, automatically creating:
+- Namespace
+- Business Deployment
+- NodePort Service
+- Ingress routing
+- Ingress public IP
 
 ![复刻仓库文件](images/pod1.png)
 ![部署](images/pod2.png)
 
-### 步骤2：验证源IP
+###  Step 2: Verify Source IP
 
 ```
-# 运行验证脚本
+# Run verification
 ./verify.sh
-# 预期输出：
-验证结果：
+
+# Expected Output:
+Verification Result:
 X-Forwarded-For: 106.55.163.108 
 ```
 ![验证](images/pod3.png)
 
-### 步骤3：清理资源
+###  Step 3: Cleanup Resources
 
 ```
-# 运行清除脚本
+# Run cleanup
 ./cleanup.sh
 ```
 ![清理](images/pod4.png)
 
-----
 
-## ✅ 验证标准
+##  ✅ Verification Checklist
 
-
-|验证项|成功标准|检查命令|
+|​**Item**​|​**SuccessCriteria**​|​**CheckCommand**​|
 |:-:|:-:|:-:|
-|​**部署状态**​|所有资源创建成功|`kubectl get all -n kestrelli-catchip `|
-|​**Ingress状态**​|Ingress有公网IP|`kubectl get ingress -n kestrelli-catchip `|
-|​**源IP验证**​|返回X-Forwarded-For头|`./verify.sh`|
+|​**Deployment Status**​|All resources created successfully|`kubectl get all -n kestrelli-catchip`|
+|​**Ingress Status**​|Ingress has public IP|`kubectl get ingress -n kestrelli-catchip`|
+|​**Source IP Validation**​|Returns X-Forwarded-For header|`./verify.sh`|
 
-
-----
-
-### 自定义业务测试镜像
+### ​**Custom Test Image**​
 ```
-# 修改deploy.sh中的镜像地址  
-sed -i 's|test-angel01.tencentcloudcr.com|your-registry.com|g' deploy.sh  
+# Modify image in deploy.sh
+sed -i 's|test-angel01.tencentcloudcr.com|your-registry.com|g' deploy.sh 
 ```
-## 项目结构
+##  📦 Project Structure
 ```
-复制gr-clb-non-direct-pod/  
-├── deploy.sh        # 一键部署脚本  
-├── verify.sh        # 验证脚本  
-├── cleanup.sh       # 清理脚本  
-├── README.md        # 本文档   
+gr-clb-non-direct-pod/  
+├── deploy.sh        # Deployment script  
+├── verify.sh        # Verification script  
+├── cleanup.sh       # Cleanup script  
+└── README.md        # Documentation   
 ```
