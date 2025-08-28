@@ -104,13 +104,14 @@ X-Forwarded-For: 106.55.163.108
 
 ![清除](images/pod4.png)
 
-## ✅  Verification Checklist
+### ✅ Verification Checklist
 |​**Item**​|​**SuccessCriteria**​|​**CheckCommand**​|
 |:-:|:-:|:-:|
 |​**Deployment Status**​|All resources created successfully|`kubectl get all -n kestrelli-catchip`|
 |​**Ingress Status**​|Ingress has public IP|`kubectl get ingress -n kestrelli-catchip`|
 |​**Source IP Validation**​|Returns X-Forwarded-For header|`./verify.sh`|
-## 📂  Project Structure
+
+### 📂 Project Structure
 
 ```
 eni-clb-non-direct-pod/  
