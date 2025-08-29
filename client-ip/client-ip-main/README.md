@@ -1,6 +1,6 @@
 ##  TKE Real Client IP Preservation Guide
 [English](README.md) | [中文](README_zh.md)
-#### **Background & Necessity: Solving Critical Pain Points in Cloud-Native Environments**​**​
+#### **Background & Necessity: Solving Critical Pain Points in Cloud-Native Environments**​
 
 In Tencent Kubernetes Engine (TKE), ​**preserving the client’s real source IP**​ is essential for security auditing, access control, logging, and analytics. However, the default Kubernetes networking model replaces the source IP with the node IP.
 
@@ -19,6 +19,7 @@ This project provides ​**five standardized solutions**​ covering both TKE ne
 - **Precise Traffic Control**: Supports canary releases and geo-restrictions.
 
 **2. Performance & Cost Optimization**​
+
 |​**Mode**​|​**Advantage**​|​**UseCase**​|
 |:-:|:-:|:-:|
 |​**Direct Pod**​|Eliminates NodePort, reduces latency|High-frequency trading, real-time risk control|
@@ -57,7 +58,8 @@ graph TD
     Scenario5 --> Verify  
 ```
 
-### 🔧 ​**Configuration Examples**​
+### 🔧 ​**Configuration Examples**
+​
 #### ​**Scenario 1: VPC-CNI Direct Pod (Native Node)​**​
 ```
 # service.yaml  
@@ -77,7 +79,9 @@ spec:
       port: 80  
       targetPort: 5000  # App port  
 ```
+
 #### **Scenario 2: GlobalRouter Direct Pod (Native Node)​**​
+
 ```
 # service.yaml  
 apiVersion: v1  
@@ -100,7 +104,9 @@ spec:
 kubectl patch cm tke-service-controller-config -n kube-system \  
   --patch '{"data":{"GlobalRouteDirectAccess":"true"}}'  
 ```
+
 #### **Scenario 3: VPC-CNI Direct Pod (Super Node)​**​
+
 ```
 # service.yaml  
 apiVersion: v1  
@@ -119,6 +125,7 @@ spec:
       targetPort: 5000  
 ```
 #### **Scenario 4: VPC-CNI Non-Direct Pod (Native Node)​**​
+
 ```
 # ingress.yaml  
 apiVersion: networking.k8s.io/v1  
@@ -140,7 +147,9 @@ spec:
             port:  
               number: 80  
 ```
+
 #### **Scenario 5: GlobalRouter Non-Direct Pod (Native Node)​**​
+
 ```
 # ingress.yaml  
 apiVersion: networking.k8s.io/v1  
