@@ -59,7 +59,6 @@ graph TD
 ```
 
 ### 🔧 ​**Configuration Examples**
-​
 #### ​**Scenario 1: VPC-CNI Direct Pod (Native Node)​**​
 ```
 # service.yaml  
@@ -79,9 +78,7 @@ spec:
       port: 80  
       targetPort: 5000  # App port  
 ```
-
 #### **Scenario 2: GlobalRouter Direct Pod (Native Node)​**​
-
 ```
 # service.yaml  
 apiVersion: v1  
@@ -104,9 +101,7 @@ spec:
 kubectl patch cm tke-service-controller-config -n kube-system \  
   --patch '{"data":{"GlobalRouteDirectAccess":"true"}}'  
 ```
-
 #### **Scenario 3: VPC-CNI Direct Pod (Super Node)​**​
-
 ```
 # service.yaml  
 apiVersion: v1  
@@ -125,7 +120,6 @@ spec:
       targetPort: 5000  
 ```
 #### **Scenario 4: VPC-CNI Non-Direct Pod (Native Node)​**​
-
 ```
 # ingress.yaml  
 apiVersion: networking.k8s.io/v1  
@@ -149,7 +143,6 @@ spec:
 ```
 
 #### **Scenario 5: GlobalRouter Non-Direct Pod (Native Node)​**​
-
 ```
 # ingress.yaml  
 apiVersion: networking.k8s.io/v1  
