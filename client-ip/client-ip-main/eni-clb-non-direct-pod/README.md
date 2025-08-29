@@ -60,7 +60,7 @@ Obtain cluster credentials:[Obtain cluster credentials:](https://cloud.tencent.c
 **Custom Image**: Modify address in `deploy.sh`
 
 ##  🚀 Quick Start
-### Step 1: Deploy Application用
+### Step 1: Deploy Application
 
 ```
 # Clone project
